@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        /* Gestion du responsive */
+        body
+        {
+            /* height: 300px; */
+        }
+        .bloc-splash2
+        {
+            position: absolute;
+            top: 40%;
+            text-align: center;
+            width: 100%;
+        }
+        .bloc-splash2 img
+        {
+            height: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bloc-splash2"><img src="assets/img/logo-s.png" class="logo"></div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        setInterval(suivre, 3000);
+		
+		function suivre()
+		{
+			tuto = localStorage["tuto"];
+			
+			if(tuto)
+			{
+				window.location.href = 'connexion.html';
+			}
+			else
+			{
+				window.location.href = 'tuto.html';
+			}
+			
+		}
+    </script>
+</body>
+
+</html>

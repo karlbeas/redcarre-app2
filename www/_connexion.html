@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body class="body-con">
+    <div class="logo-con"><img src="assets/img/logo-s.png"></div>
+    <div class="bloc-form-con">
+        <div class="bloc-welcome"><span>Bienvenue sur <strong>nize</strong>.</span></div>
+        <div><button class="btn btn-primary btn-light no-rp no-shadow rounded-bottom w-100 s-rounded t-orange" type="button"><i class="fa fa-facebook"></i>&nbsp; Se connecter avec facebook</button></div>
+        <div class="bloc-ou"><span>OU</span></div>
+        <div><button class="btn btn-primary btn-outline-light no-shadow w-100 s-rounded" id="btn_1_connect" type="button">Se connecter</button></div>
+        <div><span>Vous n'avez pas de compte ? <strong id="btn_1_new_account">Inscrivez-vous</strong></span></div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        server = JSON.parse(localStorage["server"]);
+
+        if(server.retour == "OK")
+        {
+            window.location.href = 'tableau-de-bord.html';
+        }
+    </script>
+</body>
+
+</html>

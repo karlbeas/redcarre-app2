@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fa-all.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="menu-ferme">
+        <div class="tb-m tb-menu-1">
+            <i class="fal fa-ellipsis-h"  id="tb-btn-open-menu"></i>
+        </div>
+        <div class="tb-logo">
+            <img src="assets/img/logo-ml-2.png" width="50%" />
+        </div>
+        <div class="tb-m tb-menu-2">
+            <i class="fal fa-search" id="tb-btn-open-recherche"></i>
+        </div>
+    </div>
+
+    <div class="page-content" id="espace_page_content">
+        
+    </div>
+    
+    <div class="bulle_bas"><i class="fal fa-plus"></i></div>
+
+    <div id="controle_contenu">
+        <div class="load_network">
+			<img src="assets/img/load_network.gif" />
+			<div id="msg-load">Traitement en cours...</div>
+		</div>
+    </div>
+
+    <div class="menu-ouvert">
+        <div class="tb-btn-close">
+            <div class="btn-close" id="tb-btn-close-menu"><i class="fal fa-times"></i></div>
+        </div>
+        <div class="bloc-menu-ouvert">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col tb-btn-menu" id="tb-btm-profil">
+                        <div class="bulle-menu">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div>Profil Utilisateur</div>
+                    </div>
+                    <div class="col tb-btn-menu" id="tb-btm-messages">
+                        <div class="bulle-menu">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div>Messagerie</div>
+                    </div>
+                    <div class="col tb-btn-menu" id="tb-btm-my-events">
+                        <div class="bulle-menu">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div>My Event</div>
+                    </div>
+                </div> 
+                <div class="row" style="margin-top:20px">
+                    <div class="col tb-btn-menu"  id="tb-btm-new-event">
+                        <div class="bulle-menu">
+                            <i class="fal fa-check"></i>
+                        </div>
+                        <div>Orga-nize It</div>
+                    </div>
+                    <div class="col tb-btn-menu menu-text-active" id="tb-btm-home">
+                        <div class="bulle-menu menu-active">
+                            <i class="fa fa-home"></i>
+                        </div>
+                        <div>My E-space</div>
+                    </div>
+                    <div class="col tb-btn-menu" id="tb-btm-parametres">
+                        <div class="bulle-menu">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <div>Paramètre</div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+
+    <div class="recherche-ouverte">
+        <div class="tb-btn-close">
+            <div class="btn-close" id="tb-btn-close-menu-2"><i class="fal fa-times"></i></div>
+        </div>
+        <div class="bloc-recherche-ouvert">
+            
+        </div>
+    </div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        //console.log("demarrage");
+        if (typeof localStorage['server'] !== 'undefined') {
+            info_server = localStorage['server'];
+            //console.log("oui");
+        }
+        else
+        {
+            window.location.href = 'index.html';
+            //console.log("non");
+        }
+        
+
+        $("#tb-btn-open-menu").click(function(){
+            $(".menu-ouvert").css("height", "100%");
+        });
+        $("#tb-btn-open-recherche").click(function(){
+            $(".recherche-ouverte").css("height", "100%");
+        });
+        $("#tb-btn-close-menu").click(function(){
+            $(".menu-ouvert").css("height", "0%");
+        });
+        $("#tb-btn-close-menu-2").click(function(){
+            $(".recherche-ouverte").css("height", "0%");
+        });
+
+
+        $("#tb-btm-home").click(function(){
+            window.location.href = 'tableau-de-bord.html';
+        });
+        $("#tb-btm-new-event").click(function(){
+            window.location.href = 'new-event.html';
+        });
+        $("#tb-btm-my-events").click(function(){
+            window.location.href = 'my-events.html';
+        });
+        $("#tb-btm-parametres").click(function(){
+            window.location.href = 'parametres.html';
+        });
+        $("#tb-btm-profil").click(function(){
+            window.location.href = 'profil.html';
+        });
+        $("#tb-btm-messages").click(function(){
+            window.location.href = 'messages.html';
+        });
+
+        $(".bulle_bas").click(function(){
+            window.location.href = 'new-event.html';
+        });
+
+        /* Controle de la connexion au serveur */
+
+        $.ajax({
+            method: "POST",
+            url: SERVER_API + "_00_internet.php",
+            data: { id: 'nize' }
+        })
+        .done(function( msg ) 
+        {
+            if(msg == "OK")
+            {
+                
+                info_server = JSON.parse(localStorage['server']);
+                user = info_server.user;
+                ui = user.infos;
+
+                $('#espace_page_content').html('<iframe class="lframe" src="'+SERVER_API+'iframes/tableau_de_bord/?uid='+ui.id_app+'_'+ui.crypt_pass+'"></iframe>');
+                localStorage['internet'] = '1';
+                localStorage['load_content'] = '1';
+                $("#controle_contenu").css("height","0px");
+            }
+            else
+            {
+                localStorage['internet'] = '0';
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) 
+        { 
+            localStorage['internet'] = '0';
+        });
+
+
+        setInterval(test_internet, 1000);
+
+        function test_localInternet()
+        {
+            
+            if(localStorage['internet'] == '0')
+            {
+				$("#msg-load").html("Problème de connexion...");
+                $("#controle_contenu").css("height","90%");
+            }
+            else
+            {
+				$("#msg-load").html("Traitement en cours...");
+                $("#controle_contenu").css("height","0px");
+            }
+        }
+
+        function test_internet()
+        {
+            $.ajax({
+                method: "POST",
+                url: SERVER_API + "_00_internet.php",
+                data: { id: 'nize' }
+            })
+            .done(function( msg ) 
+            {
+                if(msg == "OK")
+                {
+                    localStorage['internet'] = '1';
+                }
+                else
+                {
+                    localStorage['internet'] = '0';
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) 
+            { 
+                localStorage['internet'] = '0';
+            });
+
+            test_localInternet();
+        }
+
+        
+        info_server = JSON.parse(localStorage['server']);
+        var user = info_server.user;
+        var ui = user.infos;
+
+        
+
+
+        // Wait for device API libraries to load
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        // device APIs are available
+
+        function onDeviceReady() {
+            // find all contacts with 'Bob' in any name field
+            var options = new ContactFindOptions();
+            options.filter = "";
+            options.multiple = true;
+            //options.desiredFields = [navigator.contacts.fieldType.id];
+            options.hasPhoneNumber = true;
+            var fields = ["displayName", "name"];
+            navigator.contacts.find(fields, onSuccess, onError, options);
+        }
+
+        // onSuccess: Get a snapshot of the current contacts
+
+        function onSuccess(contacts) {
+            
+            list_contacts = '{';
+            
+            for (var i = 0; i < contacts.length; i++) 
+            {
+                if(contacts[i].phoneNumbers[0].value != '')
+                {
+                    list_contacts = list_contacts +'"'+i+'":{"nom":"'+contacts[i].name.formatted+'","numero":"'+contacts[i].phoneNumbers[0].value+'"},';
+                }
+                
+            }
+            
+            list_contacts = list_contacts + '"fin":0}';
+
+            //alert(list_contacts);
+            
+            
+            $.ajax({
+                method: "POST",
+                url: SERVER_API + "iframes/messages/ajax/add_localstorage.php",
+                data: { donnees: list_contacts, uid: ui.id_app+'_'+ui.crypt_pass  }
+            })
+            .done(function( msg ) 
+            {
+                //alert(msg +" - "+list_contacts);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) 
+            { 
+
+            });
+            
+        }
+
+        // onError: Failed to get the contacts
+
+        function onError(contactError) {
+            alert('onError!');
+        }
+
+
+    </script>
+</body>
+
+</html>

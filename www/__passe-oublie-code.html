@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+	<style>
+		body
+		{
+			background: #802412 !important;
+			background-image: linear-gradient(#ca4124, #802412) !important;
+			background-repeat: no-repeat !important;
+			background-size: cover;
+		}
+		.logo-con
+		{
+			margin-top: 50%;
+		}
+		.ch-rounded
+		{
+			box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3) inset;
+		}
+		.btn-nize
+		{
+			background-image: linear-gradient(#ca4124, #601507) !important;
+			border: none !important;
+		}
+	</style>
+</head>
+
+<body>
+    <div class="logo-con">
+		<div><img src="assets/img/flower.png" style="width: 150px !important"></div>
+		<div><img src="assets/img/logo-ml-2.png"></div>
+	</div>
+    <div class="bloc-form-con">
+        <div class="bloc-welcome"><span>Mot de passe oublié ?</span>
+            <div><span class="text-small">Merci de saisir le code recu par SMS <strong><label id="min">5</label>:<label id="sec">00</label></strong></span></div>
+        </div>
+        <div>
+            <div class="form-group no-rp no-shadow rounded-bottom w-100 s-rounded"><input type="text" class="form-control no-rp no-shadow rounded-bottom w-100 s-rounded border-0 ch-rounded" id="chp_6_code" placeholder="Code à 6 chiffres réçu par SMS"></div><button class="btn btn-primary btn-info no-rp no-shadow rounded-bottom w-100 s-rounded t-orange btn-nize"
+                type="button" id="btn_6_valider">Valider le code</button></div>
+        <div><span id="btn_6_retour"><i class="fa fa-long-arrow-left"></i>&nbsp; Retour à l'interface de connexion.</span></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body" id="msg">
+                    En cours de traitement...
+                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        function gestime()
+        {
+            if($("#sec").html() == "00")
+            {
+                if($("#min").html() == "0")
+                {
+                    $("#min").html("0");
+                    $("#sec").html("00");
+                }
+                else
+                {
+                    $("#min").html(parseInt($("#min").html()) - 1);
+                    $("#sec").html("59");
+                }
+            }
+            else
+            {
+                seco = parseInt($("#sec").html()) - 1;
+                if(seco < 10)
+                {
+                    seco = "0" + seco;
+                }
+                $("#sec").html(seco);
+            }
+
+            
+        }
+
+        setInterval(gestime, 1000);
+
+        server = JSON.parse(localStorage['infos_pass_oublie']);
+        console.log(server.mmail);
+
+
+        $("#btn_6_valider").click(function(){
+            
+            if($("#chp_6_code").val() != "")
+            {
+                server = JSON.parse(localStorage['infos_pass_oublie']);
+                uidcode = server.uidcode;
+                console.log(server.mmail);
+                
+                $.ajax({
+                    method: "POST",
+                    url: SERVER_API + "_4_renew_pass_code.php",
+                    data: { pass: localStorage['infos_new_pass'], login: localStorage['login_pass_oublie'], ncode: uidcode, code: $("#chp_6_code").val() }
+                })
+                .done(function( msg ) {
+                    server = JSON.parse(msg);
+
+                    if(server.retour == "OK")
+                    {
+                        localStorage.clear();
+                        window.location.href = 'connexion-form.html';
+                    }
+                    else
+                    {
+                        $("#msg").html("<i class='fa fa-times text-danger'></i> Ce code n'est pas correcte ou n'est plus valide. <button type='button' class='close' data-dismiss='modal'>&times;</button>");
+
+                        $("#myModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                    }
+                    
+                });
+            }
+            else
+            {
+                $("#chp_6_code").shake({
+                    interval: 100,
+                    distance: 20,
+                    times: 5
+                });
+            }
+                
+
+
+        });
+    </script>
+</body>
+
+</html>

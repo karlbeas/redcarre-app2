@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+	<style>
+		body
+		{
+			background: #802412 !important;
+			background-image: linear-gradient(#ca4124, #802412) !important;
+			background-repeat: no-repeat !important;
+			background-size: cover;
+		}
+		.logo-con
+		{
+			margin-top: 50%;
+		}
+		.ch-rounded
+		{
+			box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3) inset;
+		}
+		.btn-nize
+		{
+			background-image: linear-gradient(#ca4124, #601507) !important;
+			border: none !important;
+		}
+	</style>
+</head>
+
+<body>
+    <div class="logo-con">
+		<div><img src="assets/img/flower.png" style="width: 150px !important"></div>
+		<div><img src="assets/img/logo-ml-2.png"></div>
+	</div>
+    <div class="bloc-form-con">
+        <div class="bloc-welcome"><span>Inscription sur <strong>nize</strong>.</span></div>
+        <div>
+            <div class="form-group no-rp no-shadow rounded-bottom w-100 s-rounded"><input type="text" class="form-control no-rp no-shadow rounded-bottom w-100 s-rounded border-0 ch-rounded" id="nom_prenom" placeholder="Nom &amp; Prénom*"></div>
+            <div class="form-group no-rp no-shadow rounded-bottom w-100 s-rounded"><input type="text" class="form-control no-rp no-shadow rounded-bottom w-100 s-rounded border-0 ch-rounded" id="login" placeholder="Login*"></div>
+            <div class="form-group no-rp no-shadow rounded-bottom w-100 s-rounded"><input type="tel" class="form-control no-rp no-shadow rounded-bottom w-100 s-rounded border-0 ch-rounded" id="phone" placeholder="Numéro de téléphone*"></div><button class="btn btn-primary btn-info no-rp no-shadow rounded-bottom w-100 s-rounded t-orange btn-nize" id="btn_2_valide_inscri" type="button">Valider</button></div>
+        <div><span>Déjà inscrit ? <strong id="btn_2_connect">connectez-vous</strong><br></span></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body" id="msg">
+                    En cours de traitement...
+                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        $('#btn_2_valide_inscri').click(function(){
+            if($("#nom_prenom").val())
+            {
+                if($("#login").val())
+                {
+                    if($("#phone").val())
+                    {
+                        
+                        $.ajax({
+                            method: "POST",
+                            url: SERVER_API + "_5_new_user.php",
+                            data: { nom_prenom: $("#nom_prenom").val(), login: $("#login").val(), phone: $("#phone").val() }
+                        })
+                        .done(function( msg ) {
+                            server = JSON.parse(msg);
+
+                            if(server.retour == "OK")
+                            {
+                                localStorage.clear();
+                                localStorage['uan'] = server.uan;
+                                window.location.href = 'inscription-pass.html';
+                            }
+                            else
+                            {
+                                $("#msg").html("<i class='fa fa-times text-danger'></i> "+ server.msg +" <button type='button' class='close' data-dismiss='modal'>&times;</button>");
+
+                                $("#myModal").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                            }
+                            
+                        });
+
+                    }
+                    else
+                    {
+                        $("#phone").shake({
+                            interval: 100,
+                            distance: 20,
+                            times: 5
+                        });
+                    }
+                }
+                else
+                {
+                    $("#login").shake({
+                        interval: 100,
+                        distance: 20,
+                        times: 5
+                    });
+                }
+            }
+            else
+            {
+                $("#nom_prenom").shake({
+                    interval: 100,
+                    distance: 20,
+                    times: 5
+                });
+            }
+            
+            
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body{
+            background: rgba(202, 65, 36, 0) !important;
+            background-image: url(assets/img/bg-connect.png) !important;
+            background-position: center !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+            min-height: 500px;
+        }
+		.bloc-form-con
+		{
+			position: absolute;
+			bottom: 10%;
+			width: 100%;
+		}
+        .t-orange
+        {
+            background: #8b1e08;
+            border-color: #8b1e08;
+        }
+        .t-orange:hover
+        {
+            background: #6e1503;
+            border-color: #6e1503;
+        }
+        /* Gestion du responsive */
+		@media (max-height : 480px) {
+			.logo-con {
+                opacity: 0 !important;
+            }
+        }
+        @media (max-height : 568px) {
+            .logo-con {
+                margin: 60px auto;
+                margin-bottom: 100px;
+                width: 280px;
+                text-align: center;
+                height: auto;
+                margin-bottom: 0px;
+            }
+            .bloc-welcome {
+                text-align: center;
+                min-height: 20px;
+                margin: 0 auto;
+                width: 280px;
+                text-align: left;
+                font-size: 24px;
+                padding-bottom: 0px;
+            }
+        }
+        /* Gestion du responsive */
+        @media (min-height : 569px) and (max-height : 640px) {
+            
+        }
+
+        /* Gestion du responsive */
+        @media (min-height : 641px) and (max-height : 667px) {
+            
+        }
+
+        /* Gestion du responsive */
+        @media (min-height : 668px) and (max-height : 740px) {
+            body{
+                background: rgba(202, 65, 36, 0) !important;
+                background-image: url(assets/img/bg-connect.png) !important;
+                background-position: center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+                min-height: 625px;
+            }
+        }
+
+        /* Gestion du responsive */
+        @media (min-height : 741px) and (max-height : 812px) {
+            body{
+                background: rgba(202, 65, 36, 0) !important;
+                background-image: url(assets/img/bg-connect.png) !important;
+                background-position: center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+                min-height: 712px;
+            }
+        }
+
+        /* Gestion du responsive */
+        @media (min-height : 813px) and (max-height : 846px) {
+            body{
+                background: rgba(202, 65, 36, 0) !important;
+                background-image: url(assets/img/bg-connect.png) !important;
+                background-position: center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+                min-height: 725px;
+            }
+        }
+
+        /* Gestion du responsive */
+        @media (min-height : 847px) and (max-height : 896px) {
+            body{
+                background: rgba(202, 65, 36, 0) !important;
+                background-image: url(assets/img/bg-connect.png) !important;
+                background-position: center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+                min-height: 796px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo-con">
+        <div class="logo-con"><img src="assets/img/logo-sl.png"></div>
+	</div>
+    <div class="bloc-form-con">
+        <div class="bloc-welcome"><!-- <span>Inscription sur <strong>nize</strong>.</span> --></div>
+        <div>
+            <div class="form-group no-rp no-shadow rounded-bottom w-100 s-rounded"><input type="password" class="form-control no-rp no-shadow rounded-bottom w-100 s-rounded border-0" placeholder="Mot de passe" id="pwd"></div>
+            <div class="form-group no-rp no-shadow rounded-bottom w-100 s-rounded"><input type="password" class="form-control no-rp no-shadow rounded-bottom w-100 s-rounded border-0" placeholder="Confirmation du mot de passe" id="o-pwd"></div><button class="btn btn-primary btn-info no-rp no-shadow rounded-bottom w-100 s-rounded t-orange" id="btn_4_valider"
+                type="button">Valider</button></div>
+        <div><span>Déjà inscrit ? <strong id="btn_4_connect">connectez-vous</strong><br></span></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body" id="msg">
+                    En cours de traitement...
+                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        
+        $('#btn_4_valider').click(function(){
+            if($("#pwd").val() != '')
+            {
+                if($("#o-pwd").val() != '')
+                {
+                    if($("#pwd").val() == $("#o-pwd").val())
+                    {
+                        
+                        $.ajax({
+                            method: "POST",
+                            url: SERVER_API + "_6_pass_new_user.php",
+                            data: { uan: localStorage['uan'], pwd: $("#pwd").val() }
+                        })
+                        .done(function( msg ) {
+                            server = JSON.parse(msg);
+
+                            if(server.retour == "OK")
+                            {
+                                localStorage.clear();
+                                localStorage["server"] = msg;
+
+                                window.location.href = 'preferences.html';
+                            }
+                            else
+                            {
+                                $("#msg").html("<i class='fa fa-times text-danger'></i> Impossible d'inserer le mote de passe! <button type='button' class='close' data-dismiss='modal'>&times;</button>");
+
+                                $("#myModal").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                            }
+                            
+                        });
+
+                    }
+                    else
+                    {
+                        $("#msg").html("<i class='fa fa-times text-danger'></i> Mot de passe pas identique à la confirmation. <button type='button' class='close' data-dismiss='modal'>&times;</button>");
+
+                        $("#myModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+
+                        $("#o-pwd").val("");
+                        $("#o-pwd").focus();
+                    }
+                }
+                else
+                {
+                    $("#o-pwd").shake({
+                        interval: 100,
+                        distance: 20,
+                        times: 5
+                    });
+                }
+            }
+            else
+            {
+                $("#pwd").shake({
+                    interval: 100,
+                    distance: 20,
+                    times: 5
+                });
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nize</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fa-all.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="menu-ferme">
+        
+        <div class="tb-logo">
+            <img src="assets/img/logo-ml-2.png" width="45%" />
+        </div>
+        
+    </div>
+
+    <div class="page-content" id="espace_page_content">
+        <div class="titre_page_cat">Quelles sont vos préférences ?</div>
+        <div class="liste_cat">
+            
+        </div>
+        <div class="bulle_bas"><i class="fa fa-arrow-right"></i></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body" id="msg">
+                    En cours de traitement...
+                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        var tb_cat = "";
+        info_server = localStorage['server'];
+
+        $("#tb-btn-open-menu").click(function(){
+            $(".menu-ouvert").css("height", "100%");
+        });
+        $("#tb-btn-open-recherche").click(function(){
+            $(".recherche-ouverte").css("height", "100%");
+        });
+        $("#tb-btn-close-menu").click(function(){
+            $(".menu-ouvert").css("height", "0%");
+        });
+        $("#tb-btn-close-menu-2").click(function(){
+            $(".recherche-ouverte").css("height", "0%");
+        });
+        $("#tb-btm-home").click(function(){
+            window.location.href = 'tableau-de-bord.html';
+        });
+
+        $.ajax({
+            method: "POST",
+            url: SERVER_API + "_7_liste_categories.php",
+            data: { no: "" }
+        })
+        .done(function( msg ) {
+
+            $(".liste_cat").html(msg);
+            
+        });
+
+        $(".bulle_bas").click(function(){
+            //console.log(tb_cat);
+            info_server = JSON.parse(localStorage['server']);
+            user = info_server.user;
+            ui = user.infos;
+            //console.log(ui.id_app);
+            
+            $.ajax({
+                method: "POST",
+                url: SERVER_API + "_8_add_categories.php",
+                data: { uid: ui.id_app, liste_cat: tb_cat }
+            })
+            .done(function( msg ) {
+
+                server = JSON.parse(msg);
+
+                if(server.retour == "OK")
+                {
+                    console.log(server.msg);
+                    window.location.href = 'tableau-de-bord.html';
+                }
+                else
+                {
+                    $("#msg").html("<i class='fa fa-times text-danger'></i> Selectionnez une préférence! <button type='button' class='close' data-dismiss='modal'>&times;</button>");
+
+                    $("#myModal").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                }
+                
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
